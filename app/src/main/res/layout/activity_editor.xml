@@ -115,6 +115,13 @@
                 android:id="@+id/label_weight_units"
                 android:text="@string/unit_pet_weight"
                 style="@style/EditorUnitsStyle"/>
+
+            <SeekBar
+                style="@style/EditorSeekBarStyle"
+                android:id="@+id/seekBar"
+                android:max="100"
+                android:progress="50"/>
+
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

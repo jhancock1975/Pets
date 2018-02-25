@@ -44,13 +44,19 @@
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
-    <!-- Style for the measurement units for an EditText field in the editor -->
-    <style name="EditorUnitsStyle">
+    <style name="EditorStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">16dp</item>
+    </style>
+    <!-- Style for the measurement units for an EditText field in the editor -->
+    <style name="EditorUnitsStyle" parent="EditorStyle">
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
+    <style name="EditorSeekBarStyle" parent="EditorStyle">
+
     </style>
 </resources>
