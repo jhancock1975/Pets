@@ -57,6 +57,6 @@
     </style>
 
     <style name="EditorSeekBarStyle" parent="EditorStyle">
-
+        <item name="android:layout_width">match_parent</item>
     </style>
 </resources>
