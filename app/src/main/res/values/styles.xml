@@ -52,8 +52,11 @@
         <item name="android:paddingTop">16dp</item>
     </style>
     <!-- Style for the measurement units for an EditText field in the editor -->
-    <style name="EditorUnitsStyle" parent="EditorStyle">
+    <style name="EditorUnitsStyle" >
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:layout_toRightOf">@id/seek_pet_weight</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="EditorSeekBarStyle" parent="EditorStyle">

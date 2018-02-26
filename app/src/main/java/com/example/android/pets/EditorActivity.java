@@ -27,7 +27,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.pets.data.PetContract.PetEntry;
@@ -44,8 +46,11 @@ public class EditorActivity extends AppCompatActivity {
     /** EditText field to enter the pet's breed */
     private EditText mBreedEditText;
 
-    /** EditText field to enter the pet's weight */
-    private EditText mWeightEditText;
+    /** Seek bar field to enter the pet's weight */
+    private SeekBar mWeightseekBar;
+
+    /** Text view that shows weight the user is selecting using the seek bar*/
+     private TextView mWeightTextView;
 
     /** EditText field to enter the pet's gender */
     private Spinner mGenderSpinner;
@@ -57,6 +62,9 @@ public class EditorActivity extends AppCompatActivity {
      */
     private int mGender = PetEntry.GENDER_UNKNOWN;
 
+    //holds seek bar position in string format
+    private String mSeekBarPostionStr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +73,36 @@ public class EditorActivity extends AppCompatActivity {
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
-        mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
+
+        mWeightseekBar = (SeekBar) findViewById(R.id.seek_pet_weight);
+        mWeightseekBar .setOnSeekBarChangeListener(seekBarChangeListener);
+
+        mWeightTextView = (TextView) findViewById(R.id.label_weight_units);
+
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
 
         setupSpinner();
     }
+
+    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            // updated continuously as the user slides the thumb
+            mWeightTextView.setText(progress + " kg");
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            // called when the user first touches the SeekBar
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            // called after the user finishes moving the SeekBar
+        }
+    };
 
     /**
      * Setup the dropdown spinner that allows the user to select the gender of the pet.
@@ -118,7 +151,7 @@ public class EditorActivity extends AppCompatActivity {
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String breedString = mBreedEditText.getText().toString().trim();
-        String weightString = mWeightEditText.getText().toString().trim();
+        String weightString = mSeekBarPostionStr;
         int weight = Integer.parseInt(weightString);
 
         // Create database helper
