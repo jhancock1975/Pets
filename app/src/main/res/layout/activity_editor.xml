@@ -107,13 +107,12 @@
                 android:id="@+id/seek_pet_weight"
                 style="@style/EditorSeekBarStyle"
                 android:max="100"
-                android:progress="50"/>
+                android:progress="@string/seek_default_weight"/>
 
         </RelativeLayout>
         <!-- Units for weight (kg) -->
         <TextView
             android:id="@+id/label_weight_units"
-            android:text="@string/unit_pet_weight"
             style="@style/EditorUnitsStyle"/>
     </LinearLayout>
 </LinearLayout>

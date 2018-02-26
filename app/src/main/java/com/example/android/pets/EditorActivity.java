@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,8 @@ import com.example.android.pets.data.PetDbHelper;
  * Allows user to create a new pet or edit an existing one.
  */
 public class EditorActivity extends AppCompatActivity {
+
+    private static String LOG_TAG="Editor Activity";
 
     /** EditText field to enter the pet's name */
     private EditText mNameEditText;
@@ -78,8 +81,12 @@ public class EditorActivity extends AppCompatActivity {
         mWeightseekBar .setOnSeekBarChangeListener(seekBarChangeListener);
 
         mWeightTextView = (TextView) findViewById(R.id.label_weight_units);
+        mWeightTextView.setText(getString(R.string.seek_default_weight) + " "
+                + getString(R.string.unit_pet_weight));
 
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
+
+        mSeekBarPostionStr = getString(R.string.seek_default_weight);;
 
         setupSpinner();
     }
@@ -91,6 +98,7 @@ public class EditorActivity extends AppCompatActivity {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
             mWeightTextView.setText(progress + " kg");
+            mSeekBarPostionStr = progress+"";
         }
 
         @Override
@@ -152,6 +160,7 @@ public class EditorActivity extends AppCompatActivity {
         String nameString = mNameEditText.getText().toString().trim();
         String breedString = mBreedEditText.getText().toString().trim();
         String weightString = mSeekBarPostionStr;
+        Log.d(LOG_TAG, "weightString value = " + weightString);
         int weight = Integer.parseInt(weightString);
 
         // Create database helper

@@ -58,4 +58,5 @@
 
     <!-- Label for dropdown menu option if the pet is female [CHAR LIMIT=20] -->
     <string name="gender_female">Female</string>
+    <string name="seek_default_weight">50</string>
 </resources>
