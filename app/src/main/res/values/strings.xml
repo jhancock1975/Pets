@@ -59,4 +59,6 @@
     <!-- Label for dropdown menu option if the pet is female [CHAR LIMIT=20] -->
     <string name="gender_female">Female</string>
     <string name="seek_default_weight">50</string>
+    <string name="toast_str_save_err">Error with saving pet</string>
+    <string name="toast_str_insert_id_result">Pet saved with row id:</string>
 </resources>
