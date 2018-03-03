@@ -61,4 +61,6 @@
     <string name="seek_default_weight">50</string>
     <string name="toast_str_save_err">Error with saving pet</string>
     <string name="toast_str_insert_id_result">Pet saved with row id:</string>
+    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+    <string name="empty_view_subtitle_text">Get started by adding a pet</string>
 </resources>
