@@ -18,13 +18,15 @@ package com.example.android.pets;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +43,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     /** Database helper that will provide us access to the database */
     private PetDbHelper mDbHelper;
     private PetCursorAdapter petCursorAdapter;
-
+    private static final String LOG_TAG = CatalogActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
         petListView.setEmptyView(emptyView);
+
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -67,42 +70,21 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
         // and pass the context, which is the current activity.
         mDbHelper = new PetDbHelper(this);
+// Prepare the loader.  Either re-connect with an existing one,
+        // or start a new one.
 
+        petCursorAdapter = new PetCursorAdapter(this, null);
+        petListView.setAdapter(petCursorAdapter);
+
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        displayDatabaseInfo();
+
     }
 
-
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the pets database.
-     */
-    private void displayDatabaseInfo() {
-
-
-        Cursor result = getContentResolver().query(
-                PetEntry.CONTENT_URI,
-                new String[] {
-                    PetEntry._ID, PetEntry.COLUMN_PET_GENDER, PetEntry.COLUMN_PET_BREED,
-                            PetEntry.COLUMN_PET_WEIGHT, PetEntry.COLUMN_PET_NAME
-                },
-                null, null, null
-        );
-
-
-        // Find ListView to populate
-        ListView lvItems = (ListView) findViewById(R.id.list);
-
-        // Setup cursor adapter using cursor from last step
-        petCursorAdapter = new PetCursorAdapter(this, result);
-
-        // Attach cursor adapter to the ListView
-        lvItems.setAdapter(petCursorAdapter);
-    }
 
     /**
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
@@ -142,7 +124,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
                 insertPet();
-                displayDatabaseInfo();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
@@ -154,13 +135,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
 
     @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // This is called when a new Loader needs to be created.  This
         // sample only has one Loader, so we don't care about the ID.
         // First, pick the base URI to use depending on whether we are
         // currently filtering.
 
-
+        Log.d(LOG_TAG, "onCreateLoader::start");
         return new CursorLoader(this, PetEntry.CONTENT_URI, new String[] {
                 PetEntry._ID, PetEntry.COLUMN_PET_GENDER, PetEntry.COLUMN_PET_BREED,
                 PetEntry.COLUMN_PET_WEIGHT, PetEntry.COLUMN_PET_NAME
@@ -168,20 +149,15 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
-    private void cursurSwapHelper(Cursor data){
-        if (petCursorAdapter == null){
-            petCursorAdapter = new PetCursorAdapter(this, data);
-        } else {
-            petCursorAdapter.swapCursor(data);
-        }
-    }
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        cursurSwapHelper(data);
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(LOG_TAG, "onLoadFinished::start");
+        petCursorAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-        cursurSwapHelper(null);
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.d(LOG_TAG, "onLoadFinished::start");
+        petCursorAdapter.swapCursor(null);
     }
 }
