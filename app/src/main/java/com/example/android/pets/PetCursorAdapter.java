@@ -64,7 +64,7 @@ public class PetCursorAdapter extends CursorAdapter {
 
         String breed = cursor.getString(cursor.getColumnIndexOrThrow("breed"));
         if (TextUtils.isEmpty(breed)){
-            breed = "unknown";
+            breed = context.getString(R.string.text_view_breed_unknown);
         }
 
         // Populate fields with extracted properties
