@@ -133,6 +133,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(LOG_TAG, "ononOptionsItemSelected::start");
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
@@ -141,10 +142,18 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
-                // Do nothing for now
+                deleteAllPets();
                 return true;
         }
+        Log.d(LOG_TAG, "ononOptionsItemSelected::end");
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAllPets() {
+        Log.d(LOG_TAG, "deleteAllPets::start");
+        int rowsDeleted = getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
+        Log.d(LOG_TAG, rowsDeleted + " rows deleted from pet database");
+        Log.d(LOG_TAG, "deleteAllPets::end");
     }
 
 

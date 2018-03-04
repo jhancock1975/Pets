@@ -217,7 +217,7 @@ public class PetProvider extends ContentProvider {
         if (result > 0){
             getContext().getContentResolver().notifyChange(uri, null);
         }
-
+        Log.d(LOG_TAG, "delete finished");
         return result;
     }
 
