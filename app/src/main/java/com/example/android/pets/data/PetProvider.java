@@ -93,6 +93,7 @@ public class PetProvider extends ContentProvider {
                 throw new IllegalArgumentException("no case for matched id " + match
                         + " from URI " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -158,6 +159,7 @@ public class PetProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return result;
     }
 
@@ -181,6 +183,7 @@ public class PetProvider extends ContentProvider {
         if (id == -1){
             Log.d(LOG_TAG, "insert returned -1");
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -194,18 +197,28 @@ public class PetProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         final int match = sUriMatcher.match(uri);
+        int result = 0;
         switch (match) {
             case PETS:
                 // Delete all rows that match the selection and selection args
-                return database.delete(PetContract.PetEntry.TABLE_NAME, selection, selectionArgs);
+                result =  database.delete(PetContract.PetEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+
             case PET_ID:
                 // Delete a single row given by the ID in the URI
                 selection = PetContract.PetEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(PetContract.PetEntry.TABLE_NAME, selection, selectionArgs);
+                result = database.delete(PetContract.PetEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
+        if (result > 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return result;
     }
 
     @Override
@@ -225,9 +238,11 @@ public class PetProvider extends ContentProvider {
         int result = 0;
 
         switch (match) {
+
             case PETS:
                 result = updatePet( values, selection, selectionArgs);
                 break;
+
             case PET_ID:
                 // For the PET_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
@@ -236,8 +251,12 @@ public class PetProvider extends ContentProvider {
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 result = updatePet( values, selection, selectionArgs);
                 break;
+
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+        if (result > 0){
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return result;
     }
@@ -248,6 +267,7 @@ public class PetProvider extends ContentProvider {
         validateForUpdate(values, selection, selectionArgs);
 
         if (values.size() > 0) {
+
             return db.update(PetContract.PetEntry.TABLE_NAME, values, selection, selectionArgs);
         } else {
             return 0;

@@ -63,4 +63,7 @@
     <string name="toast_str_insert_id_result">Pet saved with row id:</string>
     <string name="empty_view_title_text">It\'s a bit lonely here...</string>
     <string name="empty_view_subtitle_text">Get started by adding a pet</string>
+    <string name="editor_activity_title_edit_pet">Edit pet</string>
+    <string name="toast_str_no_update">No pets\' records were updated.</string>
+    <string name="toast_str_update_id_result">rows were updated.</string>
 </resources>
